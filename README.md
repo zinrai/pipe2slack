@@ -58,4 +58,4 @@ You can execute the program from this directory and ensure it has access to the 
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](https://opensource.org/license/mit) for details.
+This project is licensed under the [MIT License](./LICENSE).
