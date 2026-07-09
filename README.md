@@ -1,6 +1,8 @@
-# slack-notifier-go
+# pipe2slack
 
-Golang program designed to receive standard output and send it as notifications to Slack.
+Reads standard input and posts it to a Slack Incoming Webhook.
+
+Pipe the output of any command to it and the collected output is sent to Slack. Implemented with the Go standard library only (no external dependencies).
 
 ## Installation
 
@@ -10,51 +12,32 @@ Build the executable:
 $ go build
 ```
 
-Create a configuration file named `config.yaml` in the same directory as the executable with the following content:
+## Configuration
 
-```yaml
-$ cat << EOF > config.yaml
-webhookURL: "YOUR_SLACK_WEBHOOK_URL_HERE"
-EOF
+The webhook URL is read from a plain-text file containing only the URL.
+
+By default the file is `$XDG_CONFIG_HOME/pipe2slack/webhook_url` (falling back to `~/.config/pipe2slack/webhook_url`):
+
+```
+$ mkdir -p ~/.config/pipe2slack
+$ echo "https://hooks.slack.com/services/XXXX/YYYY/ZZZZ" > ~/.config/pipe2slack/webhook_url
 ```
 
-Replace `YOUR_SLACK_WEBHOOK_URL_HERE` with your Slack webhook URL.
+Use `-config` to read the URL from any other path. This is the way to run under cron and other environments where `HOME` is not set, because the default location depends on it:
+
+```
+$ echo "hello" | pipe2slack -config /etc/pipe2slack/webhook_url
+```
 
 ## Usage
 
-Once you have the executable and configuration set up, you can use **slack-notifier-go** by piping the output of another command to it.
-
-For example:
+Pipe the output of another command to it:
 
 ```
-$ echo "Hello World" | ./slack-notifier-go
+$ echo "Hello World" | pipe2slack
 ```
 
-## Deployment to Server
-
-To deploy **slack-notifier-go** to your server, follow these command-line steps:
-
-1. Create a directory for the notifier application:
-
-    ```
-    # mkdir -p /opt/bin/notify
-    ```
-
-2. Copy the **slack-notifier-go** executable to the newly created directory:
-
-    ```
-    # cp slack-notifier-go /opt/bin/notify
-    ```
-
-3. Copy the configuration file (`config.yaml`) to the same directory:
-
-    ```
-    # cp config.yaml /opt/bin/notify
-    ```
-
-**slack-notifier-go** and its configuration file are both located in the `/opt/bin/notify` directory on your server.
-
-You can execute the program from this directory and ensure it has access to the necessary configuration.
+Empty input is skipped without posting.
 
 ## License
 
