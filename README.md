@@ -4,14 +4,6 @@ Reads standard input and posts it to a Slack Incoming Webhook.
 
 Pipe the output of any command to it and the collected output is sent to Slack. Implemented with the Go standard library only (no external dependencies).
 
-## Installation
-
-Build the executable:
-
-```
-$ go build
-```
-
 ## Configuration
 
 The webhook URL is read from a plain-text file containing only the URL.
